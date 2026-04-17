@@ -10,7 +10,7 @@ export const Route = createFileRoute("/auth")({
 });
 
 function AuthPage() {
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const mode = "signin" as const;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -47,10 +47,8 @@ function AuthPage() {
           Men's <span className="text-gradient-gold">Corner</span>
         </Link>
         <div className="mt-8 rounded-sm border border-border bg-card p-8 shadow-elevated">
-          <h1 className="font-display text-2xl font-semibold">{mode === "signin" ? "Sign in" : "Create account"}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {mode === "signin" ? "Access the editorial dashboard." : "First account becomes admin."}
-          </p>
+          <h1 className="font-display text-2xl font-semibold">Sign in</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Access the editorial dashboard. Invite-only.</p>
           <form onSubmit={submit} className="mt-6 space-y-4">
             <div>
               <label className="block text-xs uppercase-track text-muted-foreground">Email</label>
@@ -67,10 +65,9 @@ function AuthPage() {
               {loading ? "…" : mode === "signin" ? "Sign in" : "Create account"}
             </button>
           </form>
-          <button onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-            className="mt-4 w-full text-center text-xs text-muted-foreground hover:text-gold">
-            {mode === "signin" ? "No account? Create one" : "Have an account? Sign in"}
-          </button>
+          <p className="mt-4 text-center text-xs text-muted-foreground">
+            New accounts are created by invitation only.
+          </p>
         </div>
       </div>
     </div>
