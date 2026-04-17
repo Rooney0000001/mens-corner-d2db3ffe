@@ -52,7 +52,7 @@ function AuthPage() {
             </div>
             <button type="submit" disabled={loading}
               className="w-full rounded-sm bg-gradient-gold px-4 py-3 text-xs uppercase-track text-gold-foreground shadow-gold disabled:opacity-50">
-              {loading ? "…" : mode === "signin" ? "Sign in" : "Create account"}
+              {loading ? "…" : "Sign in"}
             </button>
           </form>
           <p className="mt-4 text-center text-xs text-muted-foreground">
