@@ -10,7 +10,7 @@ export const Route = createFileRoute("/auth")({
 });
 
 function AuthPage() {
-  const mode = "signin" as const;
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,20 +24,10 @@ function AuthPage() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    if (mode === "signup") {
-      const { error } = await supabase.auth.signUp({
-        email, password,
-        options: { emailRedirectTo: window.location.origin + "/admin" },
-      });
-      setLoading(false);
-      if (error) { toast.error(error.message); return; }
-      toast.success("Account created. You're signed in.");
-    } else {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      setLoading(false);
-      if (error) { toast.error(error.message); return; }
-      toast.success("Welcome back.");
-    }
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setLoading(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Welcome back.");
   }
 
   return (
