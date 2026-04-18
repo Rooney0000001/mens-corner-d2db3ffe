@@ -156,7 +156,7 @@ function PostPage() {
         </div>
       ) : null}
 
-      <div className="prose-luxury" dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content) }} />
+      <div className="prose-luxury" dangerouslySetInnerHTML={{ __html: renderContent(post.content) }} />
 
       {/* Share */}
       <div className="mt-12 flex flex-col items-center gap-4 border-y border-border py-8">
