@@ -66,6 +66,16 @@ function renderMarkdown(md: string): string {
   return html;
 }
 
+// Render the post content. New posts are HTML from the rich text editor;
+// legacy posts may be plain markdown — auto-detect and convert.
+function renderContent(content: string): string {
+  const looksLikeHtml = /<\/?(p|h[1-6]|ul|ol|li|blockquote|strong|em|img|a|span|div|br)\b/i.test(content);
+  const html = looksLikeHtml ? content : renderMarkdown(content);
+  return DOMPurify.sanitize(html, {
+    ADD_ATTR: ["target", "rel", "style"],
+  });
+}
+
 function PostPage() {
   const { slug } = Route.useParams();
   const [post, setPost] = useState<PostWithCategory | null>(null);
