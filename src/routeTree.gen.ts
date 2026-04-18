@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VideosRouteImport } from './routes/videos'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -19,6 +20,8 @@ import { Route as CategoriesIndexRouteImport } from './routes/categories.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as CategoriesSlugRouteImport } from './routes/categories.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as AdminVideosRouteImport } from './routes/admin.videos'
+import { Route as AdminTeamRouteImport } from './routes/admin.team'
 import { Route as AdminSubscribersRouteImport } from './routes/admin.subscribers'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
@@ -26,6 +29,11 @@ import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminPostsIndexRouteImport } from './routes/admin.posts.index'
 import { Route as AdminPostsIdRouteImport } from './routes/admin.posts.$id'
 
+const VideosRoute = VideosRouteImport.update({
+  id: '/videos',
+  path: '/videos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -76,6 +84,16 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminVideosRoute = AdminVideosRouteImport.update({
+  id: '/videos',
+  path: '/videos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTeamRoute = AdminTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminSubscribersRoute = AdminSubscribersRouteImport.update({
   id: '/subscribers',
   path: '/subscribers',
@@ -114,10 +132,13 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/search': typeof SearchRoute
+  '/videos': typeof VideosRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/subscribers': typeof AdminSubscribersRoute
+  '/admin/team': typeof AdminTeamRoute
+  '/admin/videos': typeof AdminVideosRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -131,10 +152,13 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/search': typeof SearchRoute
+  '/videos': typeof VideosRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/subscribers': typeof AdminSubscribersRoute
+  '/admin/team': typeof AdminTeamRoute
+  '/admin/videos': typeof AdminVideosRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/admin': typeof AdminIndexRoute
@@ -150,10 +174,13 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
   '/search': typeof SearchRoute
+  '/videos': typeof VideosRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/subscribers': typeof AdminSubscribersRoute
+  '/admin/team': typeof AdminTeamRoute
+  '/admin/videos': typeof AdminVideosRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/admin/': typeof AdminIndexRoute
@@ -170,10 +197,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/search'
+    | '/videos'
     | '/admin/categories'
     | '/admin/messages'
     | '/admin/settings'
     | '/admin/subscribers'
+    | '/admin/team'
+    | '/admin/videos'
     | '/blog/$slug'
     | '/categories/$slug'
     | '/admin/'
@@ -187,10 +217,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/search'
+    | '/videos'
     | '/admin/categories'
     | '/admin/messages'
     | '/admin/settings'
     | '/admin/subscribers'
+    | '/admin/team'
+    | '/admin/videos'
     | '/blog/$slug'
     | '/categories/$slug'
     | '/admin'
@@ -205,10 +238,13 @@ export interface FileRouteTypes {
     | '/auth'
     | '/contact'
     | '/search'
+    | '/videos'
     | '/admin/categories'
     | '/admin/messages'
     | '/admin/settings'
     | '/admin/subscribers'
+    | '/admin/team'
+    | '/admin/videos'
     | '/blog/$slug'
     | '/categories/$slug'
     | '/admin/'
@@ -224,6 +260,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
   SearchRoute: typeof SearchRoute
+  VideosRoute: typeof VideosRoute
   BlogSlugRoute: typeof BlogSlugRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   CategoriesIndexRoute: typeof CategoriesIndexRoute
@@ -231,6 +268,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/videos': {
+      id: '/videos'
+      path: '/videos'
+      fullPath: '/videos'
+      preLoaderRoute: typeof VideosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
@@ -301,6 +345,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/videos': {
+      id: '/admin/videos'
+      path: '/videos'
+      fullPath: '/admin/videos'
+      preLoaderRoute: typeof AdminVideosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/team': {
+      id: '/admin/team'
+      path: '/team'
+      fullPath: '/admin/team'
+      preLoaderRoute: typeof AdminTeamRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/subscribers': {
       id: '/admin/subscribers'
       path: '/subscribers'
@@ -351,6 +409,8 @@ interface AdminRouteChildren {
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminSubscribersRoute: typeof AdminSubscribersRoute
+  AdminTeamRoute: typeof AdminTeamRoute
+  AdminVideosRoute: typeof AdminVideosRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminPostsIdRoute: typeof AdminPostsIdRoute
   AdminPostsIndexRoute: typeof AdminPostsIndexRoute
@@ -361,6 +421,8 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminMessagesRoute: AdminMessagesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminSubscribersRoute: AdminSubscribersRoute,
+  AdminTeamRoute: AdminTeamRoute,
+  AdminVideosRoute: AdminVideosRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminPostsIdRoute: AdminPostsIdRoute,
   AdminPostsIndexRoute: AdminPostsIndexRoute,
@@ -375,6 +437,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
   SearchRoute: SearchRoute,
+  VideosRoute: VideosRoute,
   BlogSlugRoute: BlogSlugRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   CategoriesIndexRoute: CategoriesIndexRoute,
@@ -382,3 +445,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
