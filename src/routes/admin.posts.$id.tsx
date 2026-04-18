@@ -9,12 +9,12 @@ import { Upload, ArrowLeft } from "lucide-react";
 type Cat = { id: string; name: string };
 type Form = {
   title: string; slug: string; excerpt: string; content: string;
-  cover_url: string; category_id: string;
+  cover_url: string; video_url: string; category_id: string;
   status: "draft" | "scheduled" | "published"; featured: boolean;
   hero_position: number | null; scheduled_at: string;
 };
 
-const empty: Form = { title: "", slug: "", excerpt: "", content: "", cover_url: "", category_id: "", status: "draft", featured: false, hero_position: null, scheduled_at: "" };
+const empty: Form = { title: "", slug: "", excerpt: "", content: "", cover_url: "", video_url: "", category_id: "", status: "draft", featured: false, hero_position: null, scheduled_at: "" };
 
 export const Route = createFileRoute("/admin/posts/$id")({
   component: EditPost,
@@ -38,7 +38,8 @@ function EditPost() {
         if (error || !data) { toast.error("Post not found"); navigate({ to: "/admin/posts" }); return; }
         setForm({
           title: data.title, slug: data.slug, excerpt: data.excerpt ?? "", content: data.content,
-          cover_url: data.cover_url ?? "", category_id: data.category_id ?? "",
+          cover_url: data.cover_url ?? "", video_url: (data as { video_url: string | null }).video_url ?? "",
+          category_id: data.category_id ?? "",
           status: data.status, featured: data.featured, hero_position: data.hero_position,
           scheduled_at: data.scheduled_at ? new Date(data.scheduled_at).toISOString().slice(0, 16) : "",
         });
@@ -75,6 +76,7 @@ function EditPost() {
       excerpt: form.excerpt.trim() || null,
       content: form.content,
       cover_url: form.cover_url || null,
+      video_url: form.video_url.trim() || null,
       category_id: form.category_id || null,
       status: form.status,
       featured: form.featured,
@@ -135,6 +137,12 @@ function EditPost() {
             </label>
             <input value={form.cover_url} onChange={(e) => set("cover_url", e.target.value)} placeholder="or paste URL"
               className="mt-2 w-full rounded-sm border border-border bg-background px-2 py-1.5 text-xs" />
+          </Field>
+
+          <Field label="Video URL (optional, replaces cover image)">
+            <input value={form.video_url} onChange={(e) => set("video_url", e.target.value)}
+              placeholder="YouTube, Vimeo, or .mp4 URL"
+              className="w-full rounded-sm border border-border bg-background px-3 py-2 text-sm" />
           </Field>
 
           <Field label="Category">

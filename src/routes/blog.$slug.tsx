@@ -4,6 +4,8 @@ import { fetchPostBySlug, fetchRelatedPosts, type PostWithCategory } from "@/lib
 import { supabase } from "@/integrations/supabase/client";
 import { formatDate } from "@/lib/utils";
 import { PostCard } from "@/components/post-card";
+import { VideoEmbed } from "@/components/video-embed";
+import { NewsletterCta } from "@/components/newsletter-cta";
 import { ArrowLeft, Clock, Twitter, Facebook, MessageCircle, BookOpen } from "lucide-react";
 
 export const Route = createFileRoute("/blog/$slug")({
@@ -133,11 +135,15 @@ function PostPage() {
         </div>
       </header>
 
-      {post.cover_url && (
+      {post.video_url ? (
+        <div className="my-12">
+          <VideoEmbed url={post.video_url} title={post.title} />
+        </div>
+      ) : post.cover_url ? (
         <div className="my-12 overflow-hidden rounded-sm shadow-elevated">
           <img src={post.cover_url} alt={post.title} className="aspect-[16/10] w-full object-cover" />
         </div>
-      )}
+      ) : null}
 
       <div className="prose-luxury" dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content) }} />
 
@@ -205,6 +211,11 @@ function PostPage() {
           </div>
         </section>
       )}
+
+      {/* Newsletter CTA at end of article */}
+      <div className="mt-20 -mx-5 sm:-mx-8">
+        <NewsletterCta />
+      </div>
     </article>
   );
 }

@@ -13,6 +13,7 @@ export type PostRow = {
   featured: boolean;
   hero_position: number | null;
   reading_time: number | null;
+  video_url: string | null;
   scheduled_at: string | null;
   published_at: string | null;
   created_at: string;

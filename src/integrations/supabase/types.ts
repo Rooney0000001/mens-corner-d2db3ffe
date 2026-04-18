@@ -68,6 +68,45 @@ export type Database = {
         }
         Relationships: []
       }
+      invite_tokens: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          email: string | null
+          expires_at: string
+          id: string
+          note: string | null
+          role: Database["public"]["Enums"]["app_role"]
+          token: string
+          used_at: string | null
+          used_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          expires_at?: string
+          id?: string
+          note?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          token: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          expires_at?: string
+          id?: string
+          note?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+          token?: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Relationships: []
+      }
       posts: {
         Row: {
           author_id: string | null
@@ -87,6 +126,7 @@ export type Database = {
           status: Database["public"]["Enums"]["post_status"]
           title: string
           updated_at: string
+          video_url: string | null
         }
         Insert: {
           author_id?: string | null
@@ -106,6 +146,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["post_status"]
           title: string
           updated_at?: string
+          video_url?: string | null
         }
         Update: {
           author_id?: string | null
@@ -125,6 +166,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["post_status"]
           title?: string
           updated_at?: string
+          video_url?: string | null
         }
         Relationships: [
           {
@@ -220,6 +262,53 @@ export type Database = {
         }
         Relationships: []
       }
+      videos: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          position: number | null
+          published: boolean
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          video_url: string
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          position?: number | null
+          published?: boolean
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          video_url: string
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          position?: number | null
+          published?: boolean
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          video_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "videos_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -230,6 +319,10 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      redeem_invite: {
+        Args: { _token: string; _user_id: string }
         Returns: boolean
       }
     }

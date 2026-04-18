@@ -1,20 +1,22 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { LayoutDashboard, FileText, FolderTree, Mail, Users, Settings, LogOut, ArrowLeft } from "lucide-react";
+import { LayoutDashboard, FileText, FolderTree, Mail, Users, Settings, LogOut, ArrowLeft, Video, UserPlus } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
 });
 
-type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean };
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; exact?: boolean; adminOnly?: boolean };
 const NAV: readonly NavItem[] = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/admin/posts", label: "Posts", icon: FileText },
+  { to: "/admin/videos", label: "Videos", icon: Video },
   { to: "/admin/categories", label: "Categories", icon: FolderTree },
   { to: "/admin/subscribers", label: "Subscribers", icon: Users },
   { to: "/admin/messages", label: "Messages", icon: Mail },
-  { to: "/admin/settings", label: "Settings", icon: Settings },
+  { to: "/admin/team", label: "Team", icon: UserPlus, adminOnly: true },
+  { to: "/admin/settings", label: "Settings", icon: Settings, adminOnly: true },
 ];
 
 function AdminLayout() {
@@ -38,7 +40,7 @@ function AdminLayout() {
           Men's <span className="text-gradient-gold">Corner</span>
         </Link>
         <nav className="flex-1 px-3 py-6">
-          {NAV.filter((n) => isAdmin || n.to !== "/admin/settings").map((n) => {
+          {NAV.filter((n) => isAdmin || !n.adminOnly).map((n) => {
             const active = n.exact ? location.pathname === n.to : location.pathname.startsWith(n.to);
             return (
               <Link key={n.to} to={n.to}
@@ -68,7 +70,7 @@ function AdminLayout() {
       <div className="flex-1 overflow-x-hidden">
         {/* Mobile nav */}
         <div className="sticky top-0 z-30 flex items-center gap-1 overflow-x-auto border-b border-border bg-background/90 px-3 py-2 backdrop-blur md:hidden">
-          {NAV.filter((n) => isAdmin || n.to !== "/admin/settings").map((n) => {
+          {NAV.filter((n) => isAdmin || !n.adminOnly).map((n) => {
             const active = n.exact ? location.pathname === n.to : location.pathname.startsWith(n.to);
             return (
               <Link key={n.to} to={n.to}
