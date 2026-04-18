@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import DOMPurify from "dompurify";
 import { fetchPostBySlug, fetchRelatedPosts, type PostWithCategory } from "@/lib/posts";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDate } from "@/lib/utils";
@@ -63,6 +64,16 @@ function renderMarkdown(md: string): string {
   }
   flushPara(); closeList();
   return html;
+}
+
+// Render the post content. New posts are HTML from the rich text editor;
+// legacy posts may be plain markdown — auto-detect and convert.
+function renderContent(content: string): string {
+  const looksLikeHtml = /<\/?(p|h[1-6]|ul|ol|li|blockquote|strong|em|img|a|span|div|br)\b/i.test(content);
+  const html = looksLikeHtml ? content : renderMarkdown(content);
+  return DOMPurify.sanitize(html, {
+    ADD_ATTR: ["target", "rel", "style"],
+  });
 }
 
 function PostPage() {
@@ -145,7 +156,7 @@ function PostPage() {
         </div>
       ) : null}
 
-      <div className="prose-luxury" dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content) }} />
+      <div className="prose-luxury" dangerouslySetInnerHTML={{ __html: renderContent(post.content) }} />
 
       {/* Share */}
       <div className="mt-12 flex flex-col items-center gap-4 border-y border-border py-8">
