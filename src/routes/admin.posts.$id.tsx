@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { slugify, readingTime } from "@/lib/utils";
 import { toast } from "sonner";
 import { Upload, ArrowLeft } from "lucide-react";
+import { RichTextEditor } from "@/components/editor/rich-text-editor";
 
 type Cat = { id: string; name: string };
 type Form = {
@@ -122,9 +123,13 @@ function EditPost() {
             <textarea value={form.excerpt} onChange={(e) => set("excerpt", e.target.value)} rows={2}
               className="w-full rounded-sm border border-border bg-background px-3 py-2 text-sm" />
           </Field>
-          <Field label="Content (Markdown supported: ## h2, ### h3, > quote, - list, **bold**)">
-            <textarea value={form.content} onChange={(e) => set("content", e.target.value)} rows={20}
-              className="w-full rounded-sm border border-border bg-background px-3 py-2 font-mono text-sm" />
+          <Field label="Content">
+            <RichTextEditor
+              value={form.content}
+              onChange={(html) => set("content", html)}
+              uploadFolder={user?.id ?? "editor"}
+              placeholder="Write your essay…"
+            />
           </Field>
         </div>
 
