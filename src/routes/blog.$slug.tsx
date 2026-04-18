@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import DOMPurify from "dompurify";
 import { fetchPostBySlug, fetchRelatedPosts, type PostWithCategory } from "@/lib/posts";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDate } from "@/lib/utils";
