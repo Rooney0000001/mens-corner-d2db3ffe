@@ -27,13 +27,12 @@ function AuthPage() {
   // Validate invite on mount
   useEffect(() => {
     if (!invite) return;
-    supabase.from("invite_tokens").select("role, used_at, expires_at").eq("token", invite).maybeSingle()
-      .then(({ data }) => {
-        if (!data) { setInviteValid(false); return; }
-        const ok = !data.used_at && new Date(data.expires_at) > new Date();
-        setInviteValid(ok);
-        setInviteRole(data.role);
-      });
+    supabase.rpc("validate_invite", { _token: invite }).then(({ data }) => {
+      const row = Array.isArray(data) ? data[0] : null;
+      if (!row) { setInviteValid(false); return; }
+      setInviteValid(!!row.valid);
+      setInviteRole(row.role);
+    });
   }, [invite]);
 
   useEffect(() => {
