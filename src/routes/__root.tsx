@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/useAuth";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { usePageTracking } from "@/hooks/usePageTracking";
 
 import appCss from "../styles.css?url";
 
@@ -79,6 +80,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   const { location } = useRouterState();
   const isAdmin = location.pathname.startsWith("/admin") || location.pathname === "/auth";
+  usePageTracking();
 
   return (
     <AuthProvider>
