@@ -1,4 +1,4 @@
-import { useEditor, EditorContent, type Editor } from "@tiptap/react";
+import { useEditor, EditorContent, BubbleMenu, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
@@ -98,7 +98,61 @@ export function RichTextEditor({ value, onChange, uploadFolder = "editor", place
         onSetLink={setLink}
       />
       <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+      <BubbleMenu
+        editor={editor}
+        tippyOptions={{ duration: 120, placement: "top" }}
+        shouldShow={({ editor, from, to }) => from !== to && !editor.isActive("image")}
+      >
+        <SelectionToolbar editor={editor} onSetLink={setLink} />
+      </BubbleMenu>
       <EditorContent editor={editor} />
+    </div>
+  );
+}
+
+function SelectionToolbar({ editor, onSetLink }: { editor: Editor; onSetLink: () => void }) {
+  const btn = (active: boolean) =>
+    `inline-flex h-7 w-7 items-center justify-center rounded-sm transition-colors ${
+      active ? "bg-gold/20 text-gold" : "text-cream hover:bg-muted"
+    }`;
+  const currentColor = (editor.getAttributes("textStyle").color as string | undefined) ?? "#ffffff";
+  const currentSize = (editor.getAttributes("fontSize").size as string | undefined) ?? "";
+
+  return (
+    <div className="flex items-center gap-0.5 rounded-sm border border-gold/40 bg-card/95 p-1 shadow-gold backdrop-blur">
+      <button type="button" className={btn(editor.isActive("bold"))} onMouseDown={(e) => e.preventDefault()} onClick={() => editor.chain().focus().toggleBold().run()} title="Bold"><Bold className="h-3.5 w-3.5" /></button>
+      <button type="button" className={btn(editor.isActive("italic"))} onMouseDown={(e) => e.preventDefault()} onClick={() => editor.chain().focus().toggleItalic().run()} title="Italic"><Italic className="h-3.5 w-3.5" /></button>
+      <button type="button" className={btn(editor.isActive("underline"))} onMouseDown={(e) => e.preventDefault()} onClick={() => editor.chain().focus().toggleUnderline().run()} title="Underline"><UIcon className="h-3.5 w-3.5" /></button>
+      <button type="button" className={btn(editor.isActive("strike"))} onMouseDown={(e) => e.preventDefault()} onClick={() => editor.chain().focus().toggleStrike().run()} title="Strikethrough"><Strikethrough className="h-3.5 w-3.5" /></button>
+      <span className="mx-0.5 h-4 w-px bg-border" />
+      <select
+        value={currentSize}
+        onMouseDown={(e) => e.stopPropagation()}
+        onChange={(e) => {
+          const v = e.target.value;
+          if (!v) (editor.chain().focus() as any).unsetFontSize().run();
+          else (editor.chain().focus() as any).setFontSize(v).run();
+        }}
+        className="h-7 rounded-sm border border-border bg-background px-1 text-[11px] text-cream"
+        title="Font size"
+      >
+        <option value="">Size</option>
+        {FONT_SIZES.map((s) => <option key={s} value={s}>{s}</option>)}
+      </select>
+      <label className="relative inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-sm hover:bg-muted" title="Text color">
+        <span className="h-3.5 w-3.5 rounded-full border border-border" style={{ background: currentColor }} />
+        <input
+          type="color"
+          value={currentColor}
+          onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
+          className="absolute inset-0 cursor-pointer opacity-0"
+        />
+      </label>
+      <span className="mx-0.5 h-4 w-px bg-border" />
+      <button type="button" className={btn(editor.isActive("link"))} onMouseDown={(e) => e.preventDefault()} onClick={onSetLink} title="Link"><LinkIcon className="h-3.5 w-3.5" /></button>
+      <button type="button" className={btn(editor.isActive("heading", { level: 2 }))} onMouseDown={(e) => e.preventDefault()} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} title="H2"><Heading2 className="h-3.5 w-3.5" /></button>
+      <button type="button" className={btn(editor.isActive("heading", { level: 3 }))} onMouseDown={(e) => e.preventDefault()} onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} title="H3"><Heading3 className="h-3.5 w-3.5" /></button>
+      <button type="button" className={btn(editor.isActive("blockquote"))} onMouseDown={(e) => e.preventDefault()} onClick={() => editor.chain().focus().toggleBlockquote().run()} title="Quote"><Quote className="h-3.5 w-3.5" /></button>
     </div>
   );
 }
