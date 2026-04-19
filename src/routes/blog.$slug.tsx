@@ -7,6 +7,7 @@ import { formatDate } from "@/lib/utils";
 import { PostCard } from "@/components/post-card";
 import { VideoEmbed } from "@/components/video-embed";
 import { NewsletterCta } from "@/components/newsletter-cta";
+import { trackPostRead } from "@/hooks/usePageTracking";
 import { ArrowLeft, Clock, Twitter, Facebook, MessageCircle, BookOpen } from "lucide-react";
 
 export const Route = createFileRoute("/blog/$slug")({
@@ -88,6 +89,7 @@ function PostPage() {
     fetchPostBySlug(slug).then(async (p) => {
       setPost(p);
       if (p) {
+        trackPostRead(p.id, p.slug);
         const r = await fetchRelatedPosts(p.category_id, p.id);
         setRelated(r);
       }
