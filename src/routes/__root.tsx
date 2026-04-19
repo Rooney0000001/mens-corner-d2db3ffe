@@ -33,6 +33,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "google-site-verification", content: "9bSeRV3wHbpdLPSVbBqkn-HAkE4ON-PvcgljC7uLqUY" },
       { title: "Men's Corner — Mindset, Finance, Fitness, Purpose" },
       { name: "description", content: "A premium publication for the modern man. Sharp ideas on mindset, finance, fitness, and purpose." },
       { name: "author", content: "Men's Corner" },
