@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { Send, Sparkles, ArrowLeft, RotateCcw } from "lucide-react";
+import { Send, ArrowLeft, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/mens-corner-logo.png";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -180,9 +181,7 @@ function CoachPage() {
             <ArrowLeft className="h-3 w-3" /> Back home
           </Link>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-gold shadow-gold">
-              <Sparkles className="h-5 w-5 text-gold-foreground" />
-            </div>
+            <img src={logo} alt="Men's Corner" className="h-12 w-12 object-contain" />
             <div className="text-right">
               <p className="font-display text-base font-semibold text-cream">
                 Corner Coach
