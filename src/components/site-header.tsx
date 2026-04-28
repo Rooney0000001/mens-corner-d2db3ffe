@@ -21,8 +21,8 @@ export function SiteHeader() {
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
         <Link to="/" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
           <img src={logo} alt="Men's Corner" className="h-12 w-12 object-contain sm:h-14 sm:w-14" />
-          <span className="hidden font-display text-xl font-bold tracking-tight sm:inline-block sm:text-2xl">
-            Men's <span className="text-gradient-gold">Corner</span>
+          <span className="font-display text-lg font-bold uppercase tracking-[0.2em] sm:text-2xl sm:tracking-[0.25em]">
+            MEN'S <span className="text-gradient-gold">CORNER</span>
           </span>
         </Link>
 
