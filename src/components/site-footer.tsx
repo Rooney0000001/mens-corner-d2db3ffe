@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import logo from "@/assets/mens-corner-logo.png";
 
 export function SiteFooter() {
   const [email, setEmail] = useState("");
@@ -27,8 +28,11 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8">
         <div className="grid gap-12 md:grid-cols-3">
           <div>
-            <Link to="/" className="font-display text-2xl font-bold">
-              Men's <span className="text-gradient-gold">Corner</span>
+            <Link to="/" className="flex items-center gap-3">
+              <img src={logo} alt="Men's Corner" className="h-14 w-14 object-contain" />
+              <span className="font-display text-2xl font-bold">
+                Men's <span className="text-gradient-gold">Corner</span>
+              </span>
             </Link>
             <p className="mt-4 max-w-xs text-sm text-muted-foreground">
               A premium publication for the modern man. Mindset, finance, fitness, purpose.
