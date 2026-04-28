@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/useAuth";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { CornerCoach } from "@/components/corner-coach";
 import { usePageTracking } from "@/hooks/usePageTracking";
 
 import appCss from "../styles.css?url";
@@ -89,6 +90,7 @@ function RootComponent() {
         <Outlet />
       </main>
       {!isAdmin && <SiteFooter />}
+      {!isAdmin && <CornerCoach />}
       <Toaster theme="dark" position="top-center" />
     </AuthProvider>
   );

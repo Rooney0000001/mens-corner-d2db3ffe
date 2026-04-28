@@ -1,1 +1,4 @@
 project_id = "gkfilrhlaputwzekzeme"
+
+[functions.corner-coach]
+verify_jwt = false
