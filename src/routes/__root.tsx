@@ -81,6 +81,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   const { location } = useRouterState();
   const isAdmin = location.pathname.startsWith("/admin") || location.pathname === "/auth";
+  const isCoach = location.pathname === "/coach";
   usePageTracking();
 
   return (
@@ -89,8 +90,8 @@ function RootComponent() {
       <main className="min-h-screen">
         <Outlet />
       </main>
-      {!isAdmin && <SiteFooter />}
-      {!isAdmin && <CornerCoach />}
+      {!isAdmin && !isCoach && <SiteFooter />}
+      {!isAdmin && !isCoach && <CornerCoach />}
       <Toaster theme="dark" position="top-center" />
     </AuthProvider>
   );
