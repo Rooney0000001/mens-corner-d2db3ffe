@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { Send, Sparkles, ArrowLeft, RotateCcw } from "lucide-react";
+import { Send, ArrowLeft, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import logo from "@/assets/mens-corner-logo.png";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
