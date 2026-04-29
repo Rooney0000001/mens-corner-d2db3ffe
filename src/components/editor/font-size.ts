@@ -11,13 +11,13 @@ export const FontSize = Mark.create({
     return {
       size: {
         default: null,
-        parseHTML: (el) => (el as HTMLElement).style.fontSize || null,
-        renderHTML: (attrs) => (attrs.size ? { style: `font-size: ${attrs.size}` } : {}),
+        parseHTML: (el: HTMLElement) => el.style.fontSize || null,
+        renderHTML: (attrs: { size?: string | null }) => (attrs.size ? { style: `font-size: ${attrs.size}` } : {}),
       },
     };
   },
   parseHTML() { return [{ style: "font-size" }]; },
-  renderHTML({ HTMLAttributes }) { return ["span", HTMLAttributes, 0]; },
+  renderHTML({ HTMLAttributes }: { HTMLAttributes: Record<string, unknown> }) { return ["span", HTMLAttributes, 0]; },
   addCommands() {
     return {
       setFontSize:

@@ -48,7 +48,7 @@ function Dashboard() {
       <div className="mt-10 rounded-sm border border-gold/30 bg-card p-6">
         <h2 className="font-display text-xl font-semibold">Quick actions</h2>
         <div className="mt-4 flex flex-wrap gap-3">
-          <Link to="/admin/posts/new" className="rounded-sm bg-gradient-gold px-4 py-2 text-xs uppercase-track text-gold-foreground">+ New post</Link>
+          <Link to="/admin/posts/$id" params={{ id: "new" }} className="rounded-sm bg-gradient-gold px-4 py-2 text-xs uppercase-track text-gold-foreground">+ New post</Link>
           <Link to="/admin/categories" className="rounded-sm border border-border px-4 py-2 text-xs uppercase-track">Manage categories</Link>
           <Link to="/admin/subscribers" className="rounded-sm border border-border px-4 py-2 text-xs uppercase-track">Export subscribers</Link>
         </div>
