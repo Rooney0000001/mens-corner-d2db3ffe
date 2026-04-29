@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { LayoutDashboard, FileText, FolderTree, Mail, Users, Settings, LogOut, ArrowLeft, Video, UserPlus, BarChart3 } from "lucide-react";
+import { LayoutDashboard, FileText, FolderTree, Mail, Users, Settings, LogOut, ArrowLeft, Video, UserPlus, BarChart3, MessageCircle } from "lucide-react";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
@@ -14,6 +14,7 @@ const NAV: readonly NavItem[] = [
   { to: "/admin/posts", label: "Posts", icon: FileText },
   { to: "/admin/videos", label: "Videos", icon: Video },
   { to: "/admin/categories", label: "Categories", icon: FolderTree },
+  { to: "/admin/chats", label: "Coach Chats", icon: MessageCircle },
   { to: "/admin/subscribers", label: "Subscribers", icon: Users },
   { to: "/admin/messages", label: "Messages", icon: Mail },
   { to: "/admin/team", label: "Team", icon: UserPlus, adminOnly: true },
