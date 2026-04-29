@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import ReactMarkdown from "react-markdown";
-import { MessageCircle, X, Send, RotateCcw, Maximize2 } from "lucide-react";
+import { X, Send, RotateCcw, Maximize2 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/mens-corner-logo.png";
@@ -384,5 +384,3 @@ export function CornerCoach() {
   );
 }
 
-// Avoid unused import lint when MessageCircle ever needed
-void MessageCircle;
