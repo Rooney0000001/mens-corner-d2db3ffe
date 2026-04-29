@@ -41,7 +41,7 @@ function PostsList() {
     <div>
       <div className="flex items-center justify-between">
         <h1 className="font-display text-3xl font-bold">Posts</h1>
-        <Link to="/admin/posts/new" className="inline-flex items-center gap-2 rounded-sm bg-gradient-gold px-4 py-2 text-xs uppercase-track text-gold-foreground">
+        <Link to="/admin/posts/$id" params={{ id: "new" }} className="inline-flex items-center gap-2 rounded-sm bg-gradient-gold px-4 py-2 text-xs uppercase-track text-gold-foreground">
           <Plus className="h-3 w-3" /> New post
         </Link>
       </div>

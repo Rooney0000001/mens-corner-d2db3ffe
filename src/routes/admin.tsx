@@ -27,7 +27,7 @@ function AdminLayout() {
   const { location } = useRouterState();
 
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/auth" });
+    if (!loading && !user) navigate({ to: "/auth", search: { invite: undefined } });
     if (!loading && user && !isEditor) navigate({ to: "/" });
   }, [user, isEditor, loading, navigate]);
 

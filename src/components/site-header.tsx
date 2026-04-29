@@ -43,6 +43,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           <Link
             to="/search"
+            search={{ q: "" }}
             className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-gold"
             aria-label="Search"
           >
@@ -60,6 +61,7 @@ export function SiteHeader() {
           ) : (
             <Link
               to="/auth"
+              search={{ invite: undefined }}
               className="hidden md:inline-flex items-center rounded-full border border-gold/40 px-4 py-2 text-xs uppercase-track text-gold transition-colors hover:bg-gold hover:text-gold-foreground"
             >
               Sign in
@@ -94,7 +96,7 @@ export function SiteHeader() {
               </Link>
             )}
             {!user && (
-              <Link to="/auth" className="uppercase-track text-sm text-gold" onClick={() => setOpen(false)}>
+              <Link to="/auth" search={{ invite: undefined }} className="uppercase-track text-sm text-gold" onClick={() => setOpen(false)}>
                 Sign in
               </Link>
             )}
