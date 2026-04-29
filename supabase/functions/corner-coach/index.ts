@@ -1,4 +1,4 @@
-// Corner Coach — streaming AI chatbot edge function
+// Corner Coach — streaming AI chatbot edge function (with conversation logging)
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
@@ -11,16 +11,16 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { messages } = await req.json();
+    const { messages, sessionId } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
-    // Pull recent published posts + ebook info to ground recommendations
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
+    // Pull recent published posts + ebook info to ground recommendations
     const [{ data: posts }, { data: settings }] = await Promise.all([
       supabase
         .from("posts")
@@ -40,6 +40,54 @@ Deno.serve(async (req) => {
     const postsList = (posts ?? [])
       .map((p: any) => `- "${p.title}" (/blog/${p.slug})${p.categories?.name ? ` [${p.categories.name}]` : ""}${p.excerpt ? ` — ${p.excerpt}` : ""}`)
       .join("\n");
+
+    // ---- Log the user's latest message (best-effort, non-blocking on errors) ----
+    const lastUserMsg = [...(messages ?? [])].reverse().find((m: any) => m.role === "user");
+    let conversationId: string | null = null;
+    if (sessionId && typeof sessionId === "string" && lastUserMsg) {
+      try {
+        const ua = req.headers.get("user-agent") ?? null;
+        // Upsert conversation by session_id
+        const { data: existing } = await supabase
+          .from("coach_conversations")
+          .select("id, message_count")
+          .eq("session_id", sessionId)
+          .maybeSingle();
+
+        if (existing) {
+          conversationId = existing.id;
+          await supabase
+            .from("coach_conversations")
+            .update({
+              message_count: (existing.message_count ?? 0) + 1,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", existing.id);
+        } else {
+          const { data: created } = await supabase
+            .from("coach_conversations")
+            .insert({
+              session_id: sessionId,
+              user_agent: ua,
+              first_message: String(lastUserMsg.content).slice(0, 500),
+              message_count: 1,
+            })
+            .select("id")
+            .single();
+          conversationId = created?.id ?? null;
+        }
+
+        if (conversationId) {
+          await supabase.from("coach_messages").insert({
+            conversation_id: conversationId,
+            role: "user",
+            content: String(lastUserMsg.content).slice(0, 8000),
+          });
+        }
+      } catch (logErr) {
+        console.error("coach log (user) failed:", logErr);
+      }
+    }
 
     const systemPrompt = `You are Corner Coach — the in-house AI mentor for Men's Corner, a premium publication for the modern man.
 
@@ -108,7 +156,63 @@ Format replies in clean markdown. Now — do the work.`;
       });
     }
 
-    return new Response(response.body, {
+    // Tee the upstream stream: one branch streams to client, the other accumulates
+    // the full assistant reply so we can persist it after streaming finishes.
+    if (!response.body) {
+      return new Response(JSON.stringify({ error: "No stream body" }), {
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const [clientStream, logStream] = response.body.tee();
+
+    // Background: parse SSE deltas and store the assistant message
+    (async () => {
+      if (!conversationId) return;
+      try {
+        const reader = logStream.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let assistant = "";
+        let done = false;
+        while (!done) {
+          const { done: d, value } = await reader.read();
+          if (d) break;
+          buffer += decoder.decode(value, { stream: true });
+          let nl: number;
+          while ((nl = buffer.indexOf("\n")) !== -1) {
+            let line = buffer.slice(0, nl);
+            buffer = buffer.slice(nl + 1);
+            if (line.endsWith("\r")) line = line.slice(0, -1);
+            if (!line || line.startsWith(":") || !line.startsWith("data: ")) continue;
+            const json = line.slice(6).trim();
+            if (json === "[DONE]") { done = true; break; }
+            try {
+              const parsed = JSON.parse(json);
+              const delta = parsed.choices?.[0]?.delta?.content as string | undefined;
+              if (delta) assistant += delta;
+            } catch { /* partial chunk */ }
+          }
+        }
+        if (assistant.trim()) {
+          await supabase.from("coach_messages").insert({
+            conversation_id: conversationId,
+            role: "assistant",
+            content: assistant.slice(0, 16000),
+          });
+          await supabase
+            .from("coach_conversations")
+            .update({
+              message_count: (messages?.length ?? 0) + 1,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", conversationId);
+        }
+      } catch (e) {
+        console.error("coach log (assistant) failed:", e);
+      }
+    })();
+
+    return new Response(clientStream, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (e) {
