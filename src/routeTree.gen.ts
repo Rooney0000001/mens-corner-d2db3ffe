@@ -28,6 +28,7 @@ import { Route as AdminTeamRouteImport } from './routes/admin.team'
 import { Route as AdminSubscribersRouteImport } from './routes/admin.subscribers'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
+import { Route as AdminChatsRouteImport } from './routes/admin.chats'
 import { Route as AdminCategoriesRouteImport } from './routes/admin.categories'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin.analytics'
 import { Route as AdminPostsIndexRouteImport } from './routes/admin.posts.index'
@@ -128,6 +129,11 @@ const AdminMessagesRoute = AdminMessagesRouteImport.update({
   path: '/messages',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminChatsRoute = AdminChatsRouteImport.update({
+  id: '/chats',
+  path: '/chats',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   id: '/categories',
   path: '/categories',
@@ -162,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/videos': typeof VideosRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/chats': typeof AdminChatsRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/subscribers': typeof AdminSubscribersRoute
@@ -186,6 +193,7 @@ export interface FileRoutesByTo {
   '/videos': typeof VideosRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/chats': typeof AdminChatsRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/subscribers': typeof AdminSubscribersRoute
@@ -212,6 +220,7 @@ export interface FileRoutesById {
   '/videos': typeof VideosRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/chats': typeof AdminChatsRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/subscribers': typeof AdminSubscribersRoute
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/admin/analytics'
     | '/admin/categories'
+    | '/admin/chats'
     | '/admin/messages'
     | '/admin/settings'
     | '/admin/subscribers'
@@ -263,6 +273,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/admin/analytics'
     | '/admin/categories'
+    | '/admin/chats'
     | '/admin/messages'
     | '/admin/settings'
     | '/admin/subscribers'
@@ -288,6 +299,7 @@ export interface FileRouteTypes {
     | '/videos'
     | '/admin/analytics'
     | '/admin/categories'
+    | '/admin/chats'
     | '/admin/messages'
     | '/admin/settings'
     | '/admin/subscribers'
@@ -452,6 +464,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminMessagesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/chats': {
+      id: '/admin/chats'
+      path: '/chats'
+      fullPath: '/admin/chats'
+      preLoaderRoute: typeof AdminChatsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/categories': {
       id: '/admin/categories'
       path: '/categories'
@@ -486,6 +505,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminChatsRoute: typeof AdminChatsRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminSubscribersRoute: typeof AdminSubscribersRoute
@@ -499,6 +519,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminChatsRoute: AdminChatsRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminSubscribersRoute: AdminSubscribersRoute,
