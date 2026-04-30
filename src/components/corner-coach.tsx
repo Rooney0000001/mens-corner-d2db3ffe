@@ -169,7 +169,7 @@ export function CornerCoach() {
         <button
           onClick={() => setOpen(true)}
           aria-label="Talk to Corner Coach"
-          className="group fixed bottom-5 right-5 z-50 flex h-16 w-16 items-center justify-center rounded-full border border-gold/40 bg-background shadow-gold transition-transform hover:scale-105"
+          className="group fixed right-5 top-1/2 z-50 flex h-16 w-16 -translate-y-1/2 items-center justify-center rounded-full border border-gold/40 bg-background shadow-gold transition-transform hover:scale-105"
         >
           <img
             src={logo}
